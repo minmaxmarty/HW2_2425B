@@ -3,8 +3,12 @@ project(wet)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(wet main.cpp
-        Matrix.cpp
+add_executable(wet Matrix.cpp
         Matrix.h
         MataMvidia.cpp
-        MataMvidia.h)
+        MataMvidia.h
+        Utilities.h
+        Utilities.cpp
+        tests.cpp
+        # main.cpp
+)

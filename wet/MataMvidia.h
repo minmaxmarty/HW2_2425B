@@ -22,9 +22,11 @@ public:
 
     unsigned int getLength() const;
 
+    ~MataMvidia(); 
     MataMvidia(const std::string& name, const std::string& producer, const Matrix* frames, unsigned int length);
     MataMvidia(const MataMvidia& otherMovie);
     MataMvidia& operator=(const MataMvidia& otherMovie);
+
 
     Matrix& operator[](unsigned int index);
     Matrix& operator[](unsigned int index) const; // read-only

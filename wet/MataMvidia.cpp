@@ -41,6 +41,10 @@ MataMvidia & MataMvidia::operator=(const MataMvidia &otherMovie) {
 
 }
 
+MataMvidia::~MataMvidia() {
+    delete[] m_frames;
+}
+
 Matrix & MataMvidia::operator[](const unsigned int index) {
     return m_frames[index];
 }

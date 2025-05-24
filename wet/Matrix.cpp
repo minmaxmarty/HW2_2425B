@@ -53,7 +53,7 @@ int & Matrix::operator()(const unsigned int i, const unsigned int j) {
 }
 
 int & Matrix::operator()(const unsigned int i, const unsigned int j) const {
-    return this(i,j);
+    return m_data[i * m_columns + j];
 }
 
 Matrix & Matrix::operator+=(const Matrix &otherMatrix) {
@@ -82,7 +82,7 @@ Matrix & Matrix::operator*=(const Matrix &otherMatrix) {
         for (int j = 0; j < m_columns; ++j) {
             int sum = 0;
             for (int k = 0; k < m_columns; ++k) {
-                sum += *this(i, k) * otherMatrix(k, i);
+                sum += (*this)(i, k) * otherMatrix(k, j);
             }
             resultMatrix(i,j) = sum;
         }
@@ -132,7 +132,7 @@ Matrix & Matrix::rotateClockwise() {
     // mirroring
     for (int i = 0; i < m_rows; ++i) {
         for (int j = 0, k = m_columns - 1; j < k; j++, k--) {
-            swap(*this(i, j), *this(j, i));
+            swap((*this)(i, j), (*this)(j, i));
         }
     }
 
@@ -148,7 +148,7 @@ Matrix & Matrix::transpose() {
     Matrix transposedMatrix(m_columns, m_rows);
     for (int i = 0; i < m_rows; ++i) {
         for (int j = 0; j < m_columns; ++j) {
-            transposedMatrix(i, j) = *this(j, i);
+            transposedMatrix(i, j) = (*this)(j, i);
         }
     }
     *this = transposedMatrix;
@@ -170,7 +170,9 @@ std::ostream & operator<<(std::ostream& out, const Matrix &matrix) {
         for (int j = 0; j < matrix.getNumOfColumns(); ++j) {
             out << matrix(i, j) << BAR;
         }
-        out << std::endl;
+        if (i != matrix.getNumOfRows() - 1) {
+            out << std::endl;
+        }
     }
 
     return out;
@@ -194,6 +196,10 @@ Matrix operator*(const Matrix &matrix1, const Matrix &matrix2) {
 Matrix operator*(const Matrix &matrix1, const int &scalar) {
     Matrix matrix2(matrix1);
     return matrix2 *= scalar;
+}
+
+Matrix operator*(const int &scalar, const Matrix &matrix1) {
+    return matrix1 * scalar;
 }
 
 // ---------------------- static functions ---------------------- //

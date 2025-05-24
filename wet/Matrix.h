@@ -63,6 +63,7 @@ Matrix operator+(const Matrix& matrix1, const Matrix& matrix2);
 Matrix operator-(const Matrix& matrix1, const Matrix& matrix2);
 Matrix operator*(const Matrix& matrix1, const Matrix& matrix2);
 Matrix operator*(const Matrix& matrix1, const int& scalar);
+Matrix operator*(const int& scalar, const Matrix& matrix1);
 
 
 
