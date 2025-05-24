@@ -9,6 +9,8 @@
 #include "Utilities.h"
 #include <cmath>
 
+const char BAR = '|';
+
 class Matrix {
     int* m_data;
     unsigned int m_rows;

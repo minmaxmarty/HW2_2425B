@@ -161,14 +161,14 @@ double Matrix::CalcFrobeniusNorm(const Matrix &matrix) {
     for (int i = 0; i < matrix.m_columns * matrix.m_rows; ++i) {
         sum += matrix.m_data[i] * matrix.m_data[i];
     }
-    return sqrt(sum);
+    return std::sqrt(sum);
 }
 
 std::ostream & operator<<(std::ostream& out, const Matrix &matrix) {
     for (int i = 0; i < matrix.getNumOfRows(); ++i) {
-        out << '|';
+        out << BAR;
         for (int j = 0; j < matrix.getNumOfColumns(); ++j) {
-            out << matrix(i, j) << '|';
+            out << matrix(i, j) << BAR;
         }
         out << std::endl;
     }
