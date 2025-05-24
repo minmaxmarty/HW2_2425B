@@ -6,30 +6,40 @@
 #define MATRIX_H
 
 #include <iostream>
-
+#include "Utilities.h"
+#include <cmath>
 
 class Matrix {
-    int* data;
-    unsigned int m_columns;
+    int* m_data;
     unsigned int m_rows;
+    unsigned int m_columns;
+
+
+    static bool checkSizes(const Matrix& matrix1, const Matrix& matrix2);
+    static void swap(int& x, int& y);
 
 public:
 
+    //getters
+    unsigned int getNumOfRows() const;
+    unsigned int getNumOfColumns() const;
+
     // constructors and assignment
-    Matrix() : data(nullptr), m_columns(0), m_rows(0) {}
-    Matrix(unsigned int columns, unsigned int rows, int initiationNumber = 0);
+    Matrix() : m_data(nullptr), m_rows(0), m_columns(0) {}
+    Matrix(unsigned int rows, unsigned int columns, int initiationNumber = 0);
+    ~Matrix();
     Matrix(const Matrix& otherMatrix);
     Matrix& operator=(const Matrix& otherMatrix);
 
     // indexing and assignments per index
-    int& operator()(unsigned int i, unsigned int j) const; // read-only
     int& operator()(unsigned int i, unsigned int j);
+    int& operator()(unsigned int i, unsigned int j) const; // read-only
 
     // math
     Matrix& operator+=(const Matrix& otherMatrix);
     Matrix& operator-=(const Matrix& otherMatrix);
     Matrix& operator*=(const Matrix& otherMatrix);
-    Matrix& operator-();
+    Matrix operator-() const;
     Matrix& operator*=(const int& scalar);
 
     // bool
@@ -42,11 +52,11 @@ public:
     Matrix& transpose();
 
     // static
-    static unsigned int CalcFrobeniusNorm(const Matrix& matrix);
+    static double CalcFrobeniusNorm(const Matrix &matrix);
 
 };
 
-std::ostream& operator<<(std::ostream out, const Matrix& matrix); // return ostream& for chain ability
+std::ostream& operator<<(std::ostream& out, const Matrix& matrix); // return ostream& for chain ability
 Matrix operator+(const Matrix& matrix1, const Matrix& matrix2);
 Matrix operator-(const Matrix& matrix1, const Matrix& matrix2);
 Matrix operator*(const Matrix& matrix1, const Matrix& matrix2);
