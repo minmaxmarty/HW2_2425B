@@ -19,6 +19,7 @@ class Matrix {
 
     static bool checkSizes(const Matrix& matrix1, const Matrix& matrix2);
     static void swap(int& x, int& y);
+    bool checkBounds(const unsigned int & i, const unsigned int & j) const;
 
 public:
 
@@ -49,9 +50,11 @@ public:
     bool operator!=(const Matrix& otherMatrix) const;
 
     // matrix manipulations
-    Matrix& rotateClockwise();
-    Matrix& rotateCounterClockwise();
-    Matrix& transpose();
+    Matrix rotateClockwise() const;
+
+    Matrix rotateCounterClockwise() const;
+
+    Matrix transpose() const;
 
     // static
     static double CalcFrobeniusNorm(const Matrix &matrix);

@@ -13,8 +13,13 @@ unsigned int Matrix::getNumOfColumns() const {
 }
 
 Matrix::Matrix(unsigned int rows, unsigned int columns, int initiationNumber) : m_rows(rows), m_columns(columns) {
+    if (!rows || !columns) {
+        m_rows = 0;
+        m_columns = 0;
+    }
+
     m_data = new int[columns * rows];
-    for (int i = 0; i < m_columns * m_rows; i++) {
+    for (unsigned int i = 0; i < m_columns * m_rows; i++) {
         m_data[i] = initiationNumber;
     }
 }
@@ -27,7 +32,7 @@ Matrix::Matrix(const Matrix &otherMatrix) {
     m_columns = otherMatrix.m_columns;
     m_rows = otherMatrix.m_rows;
     m_data = new int[otherMatrix.m_columns * otherMatrix.m_rows];
-    for (int i = 0; i < m_columns * m_rows; i++) {
+    for (unsigned int i = 0; i < m_columns * m_rows; i++) {
        m_data[i] = otherMatrix.m_data[i];
     }
 }
@@ -39,7 +44,7 @@ Matrix & Matrix::operator=(const Matrix &otherMatrix) {
     int* dataCopy = new int[otherMatrix.m_columns * otherMatrix.m_rows];
     m_columns = otherMatrix.m_columns;
     m_rows = otherMatrix.m_rows;
-    for (int i = 0; i < m_columns * m_rows; i++) {
+    for (unsigned int i = 0; i < m_columns * m_rows; i++) {
         dataCopy[i] = otherMatrix.m_data[i];
     }
     delete[] m_data;
@@ -49,10 +54,16 @@ Matrix & Matrix::operator=(const Matrix &otherMatrix) {
 }
 
 int & Matrix::operator()(const unsigned int i, const unsigned int j) {
+    if (checkBounds(i, j)) {
+        exitWithError(MatamErrorType::OutOfBounds);
+    }
     return m_data[i * m_columns + j];
 }
 
 int & Matrix::operator()(const unsigned int i, const unsigned int j) const {
+    if (checkBounds(i, j)) {
+        exitWithError(MatamErrorType::OutOfBounds);
+    }
     return m_data[i * m_columns + j];
 }
 
@@ -69,7 +80,7 @@ Matrix & Matrix::operator+=(const Matrix &otherMatrix) {
 }
 
 Matrix & Matrix::operator-=(const Matrix &otherMatrix) {
-    return *this += -otherMatrix;
+    return (*this += -otherMatrix);
 }
 
 Matrix & Matrix::operator*=(const Matrix &otherMatrix) {
@@ -77,11 +88,11 @@ Matrix & Matrix::operator*=(const Matrix &otherMatrix) {
         exitWithError(MatamErrorType::UnmatchedSizes);
     }
 
-    Matrix resultMatrix(m_rows, m_columns);
-    for (int i = 0; i < m_rows; ++i) {
-        for (int j = 0; j < m_columns; ++j) {
+    Matrix resultMatrix(m_rows, otherMatrix.m_columns);
+    for (unsigned int i = 0; i < m_rows; ++i) {
+        for (unsigned int j = 0; j < otherMatrix.m_columns; ++j) {
             int sum = 0;
-            for (int k = 0; k < m_columns; ++k) {
+            for (unsigned int k = 0; k < m_columns; ++k) {
                 sum += (*this)(i, k) * otherMatrix(k, j);
             }
             resultMatrix(i,j) = sum;
@@ -94,9 +105,7 @@ Matrix & Matrix::operator*=(const Matrix &otherMatrix) {
 
 Matrix Matrix::operator-() const {
     Matrix negativeMatrix(*this);
-    for (unsigned int i = 0; i < m_columns * m_rows; ++i) {
-        negativeMatrix.m_data[i] = -m_data[i];
-    }
+    negativeMatrix *= -1;
 
     return negativeMatrix;
 }
@@ -126,51 +135,51 @@ bool Matrix::operator!=(const Matrix &otherMatrix) const {
     return !(*this == otherMatrix);
 }
 
-Matrix & Matrix::rotateClockwise() {
-    this->transpose();
+Matrix Matrix::rotateClockwise() const {
+    Matrix rotatedMatrix = *this;
+    rotatedMatrix = rotatedMatrix.transpose();
 
     // mirroring
-    for (int i = 0; i < m_rows; ++i) {
-        for (int j = 0, k = m_columns - 1; j < k; j++, k--) {
-            swap((*this)(i, j), (*this)(j, i));
+    for (unsigned int i = 0; i < rotatedMatrix.m_rows; ++i) {
+        for (unsigned int j = 0, k = rotatedMatrix.m_columns - 1; j < k; j++, k--) {
+            swap(rotatedMatrix(i, j), rotatedMatrix(i, k));
         }
     }
 
-    return *this;
+    return rotatedMatrix;
 
 }
 
-Matrix & Matrix::rotateCounterClockwise() {
+Matrix Matrix::rotateCounterClockwise() const {
     return this->rotateClockwise().rotateClockwise().rotateClockwise();
 }
 
-Matrix & Matrix::transpose() {
+Matrix Matrix::transpose() const {
     Matrix transposedMatrix(m_columns, m_rows);
-    for (int i = 0; i < m_rows; ++i) {
-        for (int j = 0; j < m_columns; ++j) {
-            transposedMatrix(i, j) = (*this)(j, i);
+    for (unsigned int i = 0; i < m_rows; ++i) {
+        for (unsigned int j = 0; j < m_columns; ++j) {
+            transposedMatrix(j, i) = (*this)(i, j);
         }
     }
-    *this = transposedMatrix;
-    return *this;
+    return transposedMatrix;
 
 }
 
 double Matrix::CalcFrobeniusNorm(const Matrix &matrix) {
     double sum = 0;
-    for (int i = 0; i < matrix.m_columns * matrix.m_rows; ++i) {
+    for (unsigned int i = 0; i < matrix.m_columns * matrix.m_rows; ++i) {
         sum += matrix.m_data[i] * matrix.m_data[i];
     }
     return std::sqrt(sum);
 }
 
 std::ostream & operator<<(std::ostream& out, const Matrix &matrix) {
-    for (int i = 0; i < matrix.getNumOfRows(); ++i) {
-        out << BAR;
-        for (int j = 0; j < matrix.getNumOfColumns(); ++j) {
-            out << matrix(i, j) << BAR;
-        }
-        if (i != matrix.getNumOfRows() - 1) {
+    if (matrix.getNumOfRows() && matrix.getNumOfColumns()) {
+        for (unsigned int i = 0; i < matrix.getNumOfRows(); ++i) {
+            out << BAR;
+            for (unsigned int j = 0; j < matrix.getNumOfColumns(); ++j) {
+                out << matrix(i, j) << BAR;
+            }
             out << std::endl;
         }
     }
@@ -213,3 +222,9 @@ void Matrix::swap(int &x, int &y) {
     y = temp;
 }
 
+bool Matrix::checkBounds(const unsigned int & i, const unsigned int & j) const {
+    if (i >= m_rows || j >= m_columns) {
+        return true;
+    }
+    return false;
+}
