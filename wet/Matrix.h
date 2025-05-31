@@ -22,11 +22,6 @@ class Matrix {
     bool checkBounds(const unsigned int & i, const unsigned int & j) const;
 
 public:
-
-    //getters
-    unsigned int getNumOfRows() const;
-    unsigned int getNumOfColumns() const;
-
     // constructors and assignment
     Matrix() : m_data(nullptr), m_rows(0), m_columns(0) {}
     Matrix(unsigned int rows, unsigned int columns, int initiationNumber = 0);
@@ -58,10 +53,10 @@ public:
 
     // static
     static double CalcFrobeniusNorm(const Matrix &matrix);
+    friend std::ostream& operator<<(std::ostream& out, const Matrix& matrix); // return ostream& for chain ability
 
 };
 
-std::ostream& operator<<(std::ostream& out, const Matrix& matrix); // return ostream& for chain ability
 Matrix operator+(const Matrix& matrix1, const Matrix& matrix2);
 Matrix operator-(const Matrix& matrix1, const Matrix& matrix2);
 Matrix operator*(const Matrix& matrix1, const Matrix& matrix2);

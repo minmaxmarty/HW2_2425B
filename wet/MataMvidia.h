@@ -17,11 +17,6 @@ class MataMvidia {
     std::string m_producer;
 
 public:
-    const std::string& getName() const;
-    const std::string& getProducer() const;
-
-    unsigned int getLength() const;
-
     ~MataMvidia(); 
     MataMvidia(const std::string& name, const std::string& producer, const Matrix* frames, unsigned int length);
     MataMvidia(const MataMvidia& otherMovie);
@@ -33,10 +28,11 @@ public:
     MataMvidia& operator+=(const MataMvidia& otherMovie);
     MataMvidia& operator+=(const Matrix& matrix);
 
+    friend std::ostream& operator<<(std::ostream& out, const MataMvidia& movie);
+
 };
 
 MataMvidia operator+(const MataMvidia& movie1, const MataMvidia& movie2);
-std::ostream& operator<<(std::ostream& out, const MataMvidia& movie);
 
 
 #endif //MATAMVIDIA_H

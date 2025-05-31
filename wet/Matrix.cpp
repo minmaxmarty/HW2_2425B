@@ -4,14 +4,6 @@
 
 #include "Matrix.h"
 
-unsigned int Matrix::getNumOfRows() const {
-    return m_rows;
-}
-
-unsigned int Matrix::getNumOfColumns() const {
-    return m_columns;
-}
-
 Matrix::Matrix(unsigned int rows, unsigned int columns, int initiationNumber) : m_rows(rows), m_columns(columns) {
     if (!rows || !columns) {
         m_rows = 0;
@@ -174,10 +166,10 @@ double Matrix::CalcFrobeniusNorm(const Matrix &matrix) {
 }
 
 std::ostream & operator<<(std::ostream& out, const Matrix &matrix) {
-    if (matrix.getNumOfRows() && matrix.getNumOfColumns()) {
-        for (unsigned int i = 0; i < matrix.getNumOfRows(); ++i) {
+    if (matrix.m_rows && matrix.m_columns) {
+        for (unsigned int i = 0; i < matrix.m_rows; ++i) {
             out << BAR;
-            for (unsigned int j = 0; j < matrix.getNumOfColumns(); ++j) {
+            for (unsigned int j = 0; j < matrix.m_columns; ++j) {
                 out << matrix(i, j) << BAR;
             }
             out << std::endl;

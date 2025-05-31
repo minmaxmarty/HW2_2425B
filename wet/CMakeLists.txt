@@ -9,7 +9,6 @@ add_executable(wet Matrix.cpp
         MataMvidia.h
         Utilities.h
         Utilities.cpp
-        # tests.cpp
-        # main.cpp
-        TechnionMatam/HW2/tests/tests.cpp
+        tests.cpp
+        # TechnionMatam/HW2/tests/tests.cpp
 )

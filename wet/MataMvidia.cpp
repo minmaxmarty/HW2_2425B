@@ -92,10 +92,10 @@ MataMvidia operator+(const MataMvidia &movie1, const MataMvidia &movie2) {
 }
 
 std::ostream & operator<<(std::ostream &out, const MataMvidia &movie) {
-    out << "Movie Name: " << movie.getName() << std::endl;
-    out << "Author: " << movie.getProducer() << std::endl << std::endl;
+    out << "Movie Name: " << movie.m_name << std::endl;
+    out << "Author: " << movie.m_producer << std::endl << std::endl;
 
-    for (unsigned int i = 0; i < movie.getLength(); i++) {
+    for (unsigned int i = 0; i < movie.m_length; i++) {
         out << "Frame " << i << ":" << std::endl;
         out << movie[i] << std::endl;
     }
@@ -104,16 +104,3 @@ std::ostream & operator<<(std::ostream &out, const MataMvidia &movie) {
 
     return out;
 }
-
-const std::string & MataMvidia::getName() const {
-    return m_name;
-}
-
-const std::string & MataMvidia::getProducer() const {
-    return m_producer;
-}
-
-unsigned int MataMvidia::getLength() const {
-    return m_length;
-}
-
