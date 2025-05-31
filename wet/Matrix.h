@@ -53,6 +53,7 @@ public:
 
     // static
     static double CalcFrobeniusNorm(const Matrix &matrix);
+
     friend std::ostream& operator<<(std::ostream& out, const Matrix& matrix); // return ostream& for chain ability
 
 };
